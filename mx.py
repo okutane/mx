@@ -916,10 +916,13 @@ class Distribution(Dependency):
         nyi('needsUpdate', self)
 
     def maven_artifact_id(self):
+        print 'maven_artifact_id:'
         if hasattr(self, 'maven') and isinstance(self.maven, types.DictType):
             artifact_id = self.maven.get('artifactId', None)
             if artifact_id:
+                print artifact_id
                 return artifact_id
+        print 'ret _map_to_maven_dist_name'
         return _map_to_maven_dist_name(self.remoteName())
 
     def maven_group_id(self):
@@ -14780,7 +14783,9 @@ def maven_install(args):
         only = args.only.split(',')
     for dist in s.dists:
         # ignore non-exported dists
-        if not dist.internal and not dist.name.startswith('COM_ORACLE') and dist.maven:
+        print 'mvn:'
+        print dist
+        if not dist.internal and not dist.name.startswith('COM_ORACLE') and hasattr(dist, 'maven') and dist.maven:
             if len(only) is 0 or dist.name in only:
                 arcdists.append(dist)
 
